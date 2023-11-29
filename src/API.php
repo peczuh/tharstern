@@ -49,7 +49,8 @@
 			endif;
 			
 			if ($c->json->Details->Token == '00000000-0000-0000-0000-000000000000'):
-				throw new AuthenticationFailed('got invalid token (check user, password, and application ID)');
+				throw new AuthenticationFailed('got invalid token (check user, password, and application ID)',
+					context: ['request' => $c->result, 'info' => $c->info]);
 			endif;
 			
 			$token = $c->json->Details->Token;
@@ -99,8 +100,9 @@
 			
 			try {
 				$c = new CURL($url, method: CURL::POST, headers: $this->headers, data: $json);
-			} catch (\Thrive\CURL\BadRequest $e) {
-				throw new InvalidRequest($e->getMessage(), previous: $e, context: $e->getContext());
+			} catch (\ThriveData\ThrivePHP\BadRequest $e) {
+				$msg = $e->getContext()['json']?->Details?->Result?->Problems[0] ?? $e->getMessage();
+				throw new InvalidRequest($msg, previous: $e, context: $e->getContext());
 			}
 			
 			if ($c->json->Status->Success != true):
