@@ -105,8 +105,9 @@
 				throw new InvalidRequest($msg, previous: $e, context: $e->getContext());
 			}
 			
-			if ($c->json->Status->Success != true):
-				throw new EstimateFailed($c->json->Details->Result->Problems[0]);
+			if ($c->json?->Status?->Success != true):
+				$msg = $c->json->Details?->Result?->Problems[0] ?? $c->body;
+				throw new EstimateFailed($msg);
 			endif;
 			
 			return $c->json->Details;
