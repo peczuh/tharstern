@@ -3,6 +3,7 @@
 	
 	use ThriveData\ThrivePHP\ContextException;
 	use ThriveData\ThrivePHP\CURL;
+	use ThriveData\ThrivePHP\Log;
 
 	class API
 	{
@@ -106,8 +107,8 @@
 			}
 			
 			if ($c->json?->Status?->Success != true):
-				$msg = $c->json->Details?->Result?->Problems[0] ?? $c->body;
-				throw new EstimateFailed($msg);
+				$msg = $c->json->Details?->Result?->Problems[0] ?? $c->result;
+				throw new EstimateFailed($msg, context: ['request' => $json, 'response' => $c]);
 			endif;
 			
 			return $c->json->Details;
@@ -134,6 +135,38 @@
 			endif;
 				
 			return $c->json->Details->Orders;
+		}
+		
+		public function salesorderasset($json)
+		{
+			Log::debug('Tharstern::salesorderasset()');
+			
+			$url = sprintf('%s/orders/submitorderasset', $this->url);
+			
+			try {
+				$c = new CURL($url, method: CURL::POST, headers: $this->headers, data: $json);
+			} catch (\ThriveData\ThrivePHP\BadRequest $e) {
+				throw new InvalidRequest($e->getMessage(), previous: $e, context: $e->getContext());
+			}
+			
+			return $c;
+		}
+		
+		public function salesorderattach($salesOrderId, $sourceFile, $targetName)
+		{
+			Log::debug('Tharstern::salesorderattach()');
+			
+			$encoded = base64_encode(file_get_contents($sourceFile));
+			
+			$request = [
+				'OrderId' => $salesOrderId,
+				'Filename' => $targetName,
+				'Content_Base64' => $encoded,
+			];
+			
+			$json = json_encode($request);
+			
+			return $response = $this->salesorderasset($json);
 		}
 	}
 	
