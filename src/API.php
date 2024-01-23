@@ -114,9 +114,25 @@
 			return $c->json->Details;
 		}
 		
-		public function salesorder($json)
+		public function salesorder($id=[], $num=[])
 		{
-			printf("Tharstern::salesorder()\n");
+			Log::debug("Tharstern::salesorderGet()");
+			
+			$url = sprintf("%s/orders", $this->url);
+			
+			$c = new CURL($url, method: CURL::GET, headers: $this->headers, query: ['orderIDs' => $id, 'orderNOs' => $num]);
+			
+			if ($c->json->Status->Success != true):
+				throw new Exception('api error: '.print_r($c->result, 1));
+			endif;
+			
+			print_r($c->json->Details->Items);
+			return $c->json->Details->Items;
+		}
+		
+		public function salesorder_post($json)
+		{
+			Log::debug("Tharstern::salesorderSubmit()");
 			
 			$url = sprintf('%s/orders/submit', $this->url);
 			
