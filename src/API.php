@@ -162,7 +162,7 @@
 			
 			try {
 				$c = new CURL($url, method: CURL::POST, headers: $this->headers, data: $json);
-			} catch (\Thrive\CURL\BadRequest $e) {
+			} catch (\ThriveData\ThrivePHP\BadRequest $e) {
 				throw new InvalidRequest($e->getMessage(), previous: $e, context: $e->getContext());
 			}
 				
