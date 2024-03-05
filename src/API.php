@@ -117,7 +117,17 @@
 			try {
 				$c = new CURL($url, method: CURL::POST, headers: $this->headers, data: $json);
 			} catch (\ThriveData\ThrivePHP\BadRequest $e) {
-				$msg = $e->getContext()['json']?->Details?->Result?->Problems[0] ?? $e->getMessage();
+				$cxt = $e->getContext()['json'];
+				$msg = '';
+				
+				if (isset($cxt->Details->Result->Problems)):
+					$msg .= join("\n", $cxt->Details->Result->Problems)."\n";
+				endif;
+				
+				if (isset($cxt->ModelState->{'estRequestProduct.Quantity'})):
+					$msg .= $cxt->ModelState->{'estRequestProduct.Quantity'};
+				endif;
+				
 				throw new InvalidRequest($msg, previous: $e, context: $e->getContext());
 			}
 			
