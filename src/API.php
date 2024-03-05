@@ -16,7 +16,7 @@
 		
 		public function __construct($host, $user, $pwd, $appid, ?int $port=80)
 		{
-			printf("Tharstern::__construct()\n");
+			Log::debug("Tharstern::__construct()");
 			
 			$this->url = sprintf('http://%s:%s/TharsternAPI/api', $host, $port);
 			$this->user = $user;
@@ -32,7 +32,7 @@
 		
 		public function authenticate()
 		{
-			printf("Tharstern::authenticate()\n");
+			Log::debug("Tharstern::authenticate()");
 			
 			$url = sprintf('%s/authentication/GenerateAPIToken?%s',
 				$this->url,
@@ -56,7 +56,7 @@
 			
 			$token = $c->json->Details->Token;
 			$this->auth = base64_encode($token);
-			printf("Tharstern::authenticate() | AUTHKEY=%s\n", $this->auth);
+			Log::debug(sprintf("Tharstern::authenticate() | AUTHKEY=%s", $this->auth));
 		}
 		
 		public function product($code)
@@ -95,7 +95,7 @@
 		
 		public function estrequest($json)
 		{
-			printf("Tharstern::estrequest()\n");
+			Log::debug("Tharstern::estrequest()");
 			
 			$url = sprintf('%s/estrequest', $this->url);
 			
@@ -126,7 +126,6 @@
 				throw new Exception('api error: '.print_r($c->result, 1));
 			endif;
 			
-			print_r($c->json->Details->Items);
 			return $c->json->Details->Items;
 		}
 		
