@@ -93,6 +93,21 @@
 			return $c->json->Details->Items[0];
 		}
 		
+		public function estimate($id=[], $num=[])
+		{
+			Log::debug('Tharstern::estimate()');
+			
+			$url = sprintf("%s/estimates", $this->url);
+			
+			$c = new CURL($url, method: CURL::GET, headers: $this->headers, query: ['id' => $id, 'estimateRef' => $num]);
+			
+			if ($c->json->Status->Success != true):
+				throw new Exception('api error: '.print_f($c->result, 1));
+			endif;
+			
+			return $c->json->Details->Items;
+		}
+		
 		public function estrequest($json)
 		{
 			Log::debug("Tharstern::estrequest()");
