@@ -167,6 +167,25 @@
 			return $c->json->Details->Orders;
 		}
 		
+		public function job($id=[], $num=[])
+		{
+			Log::debug("Tharstern::job()");
+			
+			$url = sprintf('%s/jobs', $this->url);
+			
+			try {
+				$c = new CURL($url, method: CURL::GET, headers: $this->headers, query: ['id' => $id, 'jobNo' => $num]);
+			} catch (\ThriveData\ThrivePHP\BadRequest $e) {
+				throw new InvalidRequest($e->getMessage(), previous: $e, context: $e->getContext());
+			}
+			
+			if ($c->json->Status->Success != true):
+				throw new Exception('api error: '.print_r($c->result, 1));
+			endif;
+			
+			return $c->json->Details->Items;
+		}
+		
 		public function salesorderasset($json)
 		{
 			Log::debug('Tharstern::salesorderasset()');
