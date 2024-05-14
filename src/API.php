@@ -227,6 +227,22 @@
 			
 			return $response = $this->salesorderasset($json);
 		}
+		
+		public function jdf($jobId)
+		{
+			Log::debug('Tharstern::jdf()');
+			$url = sprintf('%s/jdf/submitjobs', $this->url);
+			$request = [
+				'Items' => [
+					['JobId' => $jobId]
+				]
+			];
+			
+			$json = json_encode($request);
+			$c = new CURL($url, method: CURL::POST, headers: $this->headers, data: $json);
+			
+			return $c->json;
+		}
 	}
 	
 	class Exception extends ContextException {};
