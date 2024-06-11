@@ -18,6 +18,6 @@
 	"minimum-stability": "stable",
 	"require": {
 		"php": ">=8.0",
-		"thrivedata/thrivephp": "~0.12.0"
+		"thrivedata/thrivephp": "~0.13.0"
 	}
 }
