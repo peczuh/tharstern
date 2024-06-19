@@ -171,7 +171,7 @@
 			endif;
 			
 			if ($c->json->Details->Orders[0]->ID == '0'):
-				throw new SalesOrderFailed($c->json->Details->Orders[0]['StatusDetails'], context: $c);
+				throw new SalesOrderFailed($c->json->Details->Orders[0]->StatusDetails, context: [$c]);
 			endif;
 				
 			return $c->json->Details->Orders;
