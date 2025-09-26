@@ -153,7 +153,7 @@
 				throw new InvalidRequest($e->getMessage(), previous: $e, context: $e->getContext());
 			}
 
-			return $c->json->Details;
+			return $c->json->Details->Estimate;
 		}
 		
 		public function estrequest($json)
