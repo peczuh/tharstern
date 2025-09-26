@@ -138,7 +138,7 @@
 		 *
 		 * @param int $id The ID of the existing estimate
 		 * @param int $quantity The new quantity for the new estimate
-		 * @return void
+		 * @return object The details of the newly created estimate
 		 * @throws InvalidRequest
 		 */
 		public function newEstimateFromExisting($id, $quantity)
@@ -152,6 +152,8 @@
 			} catch (\ThriveData\ThrivePHP\BadRequest $e) {
 				throw new InvalidRequest($e->getMessage(), previous: $e, context: $e->getContext());
 			}
+
+			return $c->json->Details->Estimate;
 		}
 		
 		public function estrequest($json)
