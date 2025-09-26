@@ -75,6 +75,31 @@
 			
 			return $c->json->Details->Items[0];
 		}
+
+		/**
+		 * Get product details by product ID
+		 *
+		 * @param int $id The product ID
+		 * @return object The product details
+		 * @throws ProductNotFound If the product is not found
+		 * @throws Exception For other API errors
+		 */
+		public function productById($id)
+		{
+			$url = sprintf('%s/products?id=%s', $this->url, $id);
+
+			$c = new CURL($url, headers: $this->headers);
+
+			if ($c->json->Status->Success != true):
+				throw new Exception('api error: '.print_r($c->result, 1));
+			endif;
+
+			if ($c->json->Details->TotalItemCount < 1):
+				throw new ProductNotFound('product not found');
+			endif;
+
+			return $c->json->Details->Items[0];
+		}
 		
 		public function producttype($id)
 		{
