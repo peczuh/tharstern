@@ -107,6 +107,27 @@
 			
 			return $c->json->Details->Items;
 		}
+
+		/**
+		 * Create a new estimate from an existing one, changing the quantity
+		 *
+		 * @param int $id The ID of the existing estimate
+		 * @param int $quantity The new quantity for the new estimate
+		 * @return void
+		 * @throws InvalidRequest
+		 */
+		public function newEstimateFromExisting($id, $quantity)
+		{
+			Log::debug('Tharstern::newEstimateFromExisting()');
+
+			$url = sprintf("%s/estimates/newestimatefromexisting?id=%s&quantity=%s", $this->url, $id, $quantity);
+
+			try {
+				$c = new CURL($url, method: CURL::POST, headers: $this->headers);
+			} catch (\ThriveData\ThrivePHP\BadRequest $e) {
+				throw new InvalidRequest($e->getMessage(), previous: $e, context: $e->getContext());
+			}
+		}
 		
 		public function estrequest($json)
 		{
