@@ -123,7 +123,7 @@
 			$url = sprintf("%s/estimates/newestimatefromexisting?id=%s&quantity=%s", $this->url, $id, $quantity);
 
 			try {
-				$c = new CURL($url, method: CURL::GET, headers: $this->headers);
+				$c = new CURL($url, method: CURL::POST, headers: $this->headers);
 			} catch (\ThriveData\ThrivePHP\BadRequest $e) {
 				throw new InvalidRequest($e->getMessage(), previous: $e, context: $e->getContext());
 			}
