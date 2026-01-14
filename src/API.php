@@ -145,7 +145,7 @@
 		{
 			Log::debug('Tharstern::newEstimateFromExisting()');
 
-			$url = sprintf("%s/estimates/newestimatefromexisting?id=%s&quantity=%s", $this->url, $id, $quantity);
+			$url = sprintf("%s/estimate/newestimatefromexisting?estimateId=%s&quantity=%s", $this->url, $id, $quantity);
 
 			try {
 				$c = new CURL($url, method: CURL::POST, headers: $this->headers);
